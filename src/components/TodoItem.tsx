@@ -54,19 +54,18 @@ export const TodoItem: React.FC<ItemProps> = ({
 
   return (
     <div data-cy="Todo" className={`todo ${todo.completed ? 'completed' : ''}`}>
+      <label className="todo__status-label">
+        <input
+          data-cy="TodoStatus"
+          type="checkbox"
+          className="todo__status"
+          checked={todo.completed}
+          disabled={isLoading}
+          onChange={() => onToggle(todo.id)}
+        />
+      </label>
       {!isEditing ? (
         <>
-          <label className="todo__status-label">
-            <input
-              data-cy="TodoStatus"
-              type="checkbox"
-              className="todo__status"
-              checked={todo.completed}
-              disabled={isLoading}
-              onChange={() => onToggle(todo.id)}
-            />
-          </label>
-
           <span
             data-cy="TodoTitle"
             className="todo__title"
@@ -111,7 +110,6 @@ export const TodoItem: React.FC<ItemProps> = ({
           />
         </form>
       )}
-
       <div
         data-cy="TodoLoader"
         className={`modal overlay ${isLoading ? 'is-active' : ''}`}

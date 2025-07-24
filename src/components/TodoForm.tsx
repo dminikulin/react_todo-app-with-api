@@ -7,7 +7,7 @@ interface FormProps {
   onTyping: (title: string) => void;
   onAdd: (e: React.FormEvent) => Promise<void>;
   onToggle: () => void;
-  disabled?: boolean;
+  disabled: boolean;
 }
 
 export const TodoForm: React.FC<FormProps> = ({
@@ -33,12 +33,14 @@ export const TodoForm: React.FC<FormProps> = ({
 
   return (
     <header className="todoapp__header">
-      <button
-        type="button"
-        className={`todoapp__toggle-all ${allCompleted ? 'active' : ''}`}
-        data-cy="ToggleAllButton"
-        onClick={onToggle}
-      />
+      {todos.length > 0 && (
+        <button
+          type="button"
+          className={`todoapp__toggle-all ${allCompleted ? 'active' : ''}`}
+          data-cy="ToggleAllButton"
+          onClick={onToggle}
+        />
+      )}
 
       <form onSubmit={onAdd}>
         <input
