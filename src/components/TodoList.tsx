@@ -5,9 +5,9 @@ import { TodoItem } from './TodoItem';
 interface ListProps {
   todos: Todo[];
   tempTodo: Todo | undefined;
-  onDelete: (id: number) => void;
+  onDelete: (id: number) => Promise<void>;
   onToggle: (id: number) => void;
-  onUpdate: (id: number, newTitle: string) => void;
+  onUpdate: (id: number, newTitle: string) => Promise<void>;
   todoLoading: boolean;
   loadingIds: Set<number>;
 }

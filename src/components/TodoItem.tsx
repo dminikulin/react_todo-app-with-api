@@ -5,9 +5,9 @@ import { Todo } from '../types/Todo';
 interface ItemProps {
   todo: Todo;
   isLoading?: boolean;
-  onDelete: (id: number) => void;
+  onDelete: (id: number) => Promise<void>;
   onToggle: (id: number) => void;
-  onUpdate: (id: number, newTitle: string) => void;
+  onUpdate: (id: number, newTitle: string) => Promise<void>;
 }
 
 export const TodoItem: React.FC<ItemProps> = ({
@@ -19,6 +19,7 @@ export const TodoItem: React.FC<ItemProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(todo.title);
+  // const [updateFailed, setUpdateFailed] = useState<boolean>(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -33,7 +34,9 @@ export const TodoItem: React.FC<ItemProps> = ({
     setIsEditing(false);
   };
 
-  const saveEditing = () => {
+  const saveEditing = async () => {
+    // setUpdateFailed(false);
+
     const trimmedTitle = editTitle.trim();
 
     if (trimmedTitle === todo.title) {
@@ -43,13 +46,21 @@ export const TodoItem: React.FC<ItemProps> = ({
     }
 
     if (trimmedTitle === '') {
-      // Delete todo if title is empty
-      onDelete(todo.id);
+      try {
+        await onDelete(todo.id);
+        setIsEditing(false);
+      } catch {
+        setIsEditing(true);
+      }
     } else {
-      onUpdate(todo.id, trimmedTitle);
+      try {
+        await onUpdate(todo.id, trimmedTitle);
+        setIsEditing(false);
+      } catch {
+        setIsEditing(true);
+        // setUpdateFailed(true);
+      }
     }
-
-    setIsEditing(false);
   };
 
   return (
@@ -70,9 +81,8 @@ export const TodoItem: React.FC<ItemProps> = ({
             data-cy="TodoTitle"
             className="todo__title"
             onDoubleClick={() => setIsEditing(true)}
-            style={{ userSelect: 'none', cursor: 'text' }}
           >
-            {todo.title}
+            {isLoading ? editTitle : todo.title}
           </span>
 
           <button

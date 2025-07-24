@@ -93,7 +93,7 @@ export const App: React.FC = () => {
   //#endregion
 
   //#region DELETING_TODOS
-  const deleteTodo = async (id: number) => {
+  const deleteTodo = async (id: number): Promise<void> => {
     setLoadingIds(prev => new Set(prev).add(id));
     setError('');
 
@@ -176,7 +176,10 @@ export const App: React.FC = () => {
     }
   };
 
-  const updateTodoTitle = async (id: number, newTitle: string) => {
+  const updateTodoTitle = async (
+    id: number,
+    newTitle: string,
+  ): Promise<void> => {
     const todo = todos.find(t => t.id === id);
 
     if (!todo) {
@@ -295,7 +298,7 @@ export const App: React.FC = () => {
 
       <div className="todoapp__content">
         <TodoForm
-          todos={filteredTodos}
+          todos={todos}
           newNoteTitle={todoTitle}
           onAdd={addNewTodo}
           onTyping={setTodoTitle}
