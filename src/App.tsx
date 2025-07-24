@@ -101,8 +101,9 @@ export const App: React.FC = () => {
       await TodoAPI.deleteTodo(id);
 
       setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
-    } catch {
+    } catch (err) {
       setError(ErrorMessage.DeleteTodo);
+      throw err;
     } finally {
       setLoadingIds(prev => {
         const newSet = new Set(prev);
@@ -205,12 +206,14 @@ export const App: React.FC = () => {
           prev.map(t => (t.id === id ? { ...t, ...response } : t)),
         );
       }
-    } catch {
+    } catch (err) {
       if (newTitle.trim() === '') {
         setError(ErrorMessage.DeleteTodo);
       } else {
         setError(ErrorMessage.UpdateTodo);
       }
+
+      throw err;
     } finally {
       setLoadingIds(prev => {
         const copy = new Set(prev);
